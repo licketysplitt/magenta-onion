@@ -1,0 +1,63 @@
+<!-- Footer -->
+<footer id="footer">
+    <div class="content">
+        <div class="inner">
+            {{ if .Site.Data.footer.about.enabled }}
+                <section class="about">
+                    <h3>{{ .Site.Data.footer.about.title }}</h3>
+                    {{ partial "markdownify-block" .Site.Data.footer.about.text }}
+                    {{ if .Site.Data.footer.about.actions }}
+                        <ul class="actions">
+                            {{ range $action := .Site.Data.footer.about.actions }}
+                                <li><a href="{{ if strings.HasPrefix $action.url "#" }}{{ $action.url }}{{ else }}{{ $action.url | relURL }}{{ end }}" class="button{{ if $action.is_primary }} primary{{ end }}{{ if $action.is_scrolly }} scrolly{{ end }}">{{ $action.label }}</a></li>
+                            {{ end }}
+                        </ul>
+                    {{ end }}
+                </section>
+            {{ end }}
+            {{ if .Site.Data.footer.contact_methods.enabled }}
+                {{ if .Site.Data.footer.contact_methods.methods_col1 }}
+                    <ul class="icons bulleted">
+                        {{ range $method := .Site.Data.footer.contact_methods.methods_col1 }}
+                            {{ if eq $method.type "contact_with_text" }}
+                                <li class="icon {{ $method.icon }}">
+                                    <h3>{{ $method.title }}</h3>
+                                    <p>{{ replace $method.text "\n" "<br />" | safeHTML }}</p>
+                                </li>
+                            {{ else if eq $method.type "contact_with_link" }}
+                                <li class="icon {{ $method.icon }}">
+                                    <h3>{{ $method.title }}</h3>
+                                    <p><a href="{{ $method.url }}">{{ replace $method.text "\n" "<br />" | safeHTML }}</a></p>
+                                </li>
+                            {{ end }}
+                        {{ end }}
+                    </ul>
+                {{ end }}
+                {{ if .Site.Data.footer.contact_methods.methods_col2 }}
+                    <ul class="icons bulleted">
+                        {{ range $method := .Site.Data.footer.contact_methods.methods_col2 }}
+                            {{ if eq $method.type "contact_with_text" }}
+                                <li class="icon {{ $method.icon }}">
+                                    <h3>{{ $method.title }}</h3>
+                                    <p>{{ replace $method.text "\n" "<br />" | safeHTML }}</p>
+                                </li>
+                            {{ else if eq $method.type "contact_with_link" }}
+                                <li class="icon {{ $method.icon }}">
+                                    <h3>{{ $method.title }}</h3>
+                                    <p><a href="{{ $method.url }}">{{ replace $method.text "\n" "<br />" | safeHTML }}</a></p>
+                                </li>
+                            {{ end }}
+                        {{ end }}
+                    </ul>
+                {{ end }}
+            {{ end }}
+        </div>
+    </div>
+    <p class="copyright">{{ if .Site.Data.footer.copyright.enabled }}{{ .Site.Data.footer.copyright.text | safeHTML }}<br />{{ end }}
+        {{ $item_list := .Site.Menus.footer }}
+        {{ $item_len := len $item_list }}
+        {{ range $item_idx, $item := $item_list }}
+            <a href="{{ if strings.HasPrefix $item.URL "#" }}{{ $item.URL }}{{ else }}{{ $item.URL | relURL }}{{ end }}">{{ $item.Name }}</a>{{ if not (eq $item_idx (sub $item_len 1)) }} | {{ end }}
+        {{ end }}
+    </p>
+</footer>

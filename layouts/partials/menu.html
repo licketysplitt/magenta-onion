@@ -1,0 +1,12 @@
+<ul>
+    {{ range $item := .menu }}
+            <li>
+                <a href="{{ if strings.HasPrefix $item.URL "#" }}{{ $item.URL }}{{ else }}{{ $item.URL | relURL }}{{ end }}" {{ if eq $item.Identifier "layouts" }}class="submenu"{{ end }}>{{ $item.Name }}</a>
+                {{ if gt ($item.Children | len) 0 }}
+                    {{ $menu := $item.Children }}
+                    {{ $include_dict := dict "menu" $menu "page" $ }}
+                    {{ partial "menu.html" $include_dict }}
+                {{ end }}
+            </li>
+    {{ end }}
+</ul>

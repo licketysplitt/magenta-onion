@@ -1,0 +1,49 @@
+{{ define "content" }}
+
+    <!-- Main -->
+    <section id="main" class="wrapper{{ if .Params.sidebar.enabled }} sidebar {{ .Params.sidebar.side }}{{ end }}">
+        <div class="inner">
+            <header class="major">
+                <h2>{{ .Title }}</h2>
+                {{ partial "markdownify-block" .Params.subtitle }}
+            </header>
+            
+            <!-- Content -->
+            <div class="content">
+                {{ if .Params.content_img.enabled }}
+                    <a href="{{ relref . .Params.content_img.url | relURL }}" class="image fit"><img src="{{ .Params.content_img.path | relURL }}" alt="" /></a>
+                {{ end }}
+                {{ .Content }}
+            </div>
+            
+            {{ if .Params.sidebar.enabled }}
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    
+                    {{ $post_list := (where ((.Site.GetPage "section" "/posts").Pages) "Params.show_in_sidebar" true).ByDate.Reverse }}
+                    {{ $post_len := len $post_list }}
+                    {{ range $post_idx, $post := $post_list }}
+                        <section>
+                            {{ if $post.Params.alt_img }}
+                                <a href="{{ $post.URL }}" class="image fit"><img src="{{ $post.Params.alt_img | relURL }}" alt="" /></a>
+                            {{ end }}
+                            <h3>{{ $post.Title }}</h3>
+                            {{ partial "markdownify-block" $post.Params.excerpt }}
+                            <footer>
+                                <ul class="actions">
+                                    <li><a href="{{ $post.URL }}" class="button">Learn More</a></li>
+                                </ul>
+                            </footer>
+                        </section>
+                        {{ if not (eq $post_idx (sub $post_len 1)) }}
+                            <hr />
+                        {{ end }}
+                    {{ end }}
+                    
+                </div>
+            {{ end }}
+            
+        </div>
+    </section>
+
+{{ end }}
